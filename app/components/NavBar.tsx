@@ -7,11 +7,11 @@ import { InstancedMesh } from 'three/src/Three.js'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from './ui/button'
+import { Button, buttonVariants } from './ui/button'
 import { UserButton } from '@clerk/nextjs'
 
 import { ThemeSwitcherBtn } from './ThemeSwitcherBtn'
-import { Sheet } from './ui/sheet'
+import { Sheet, SheetTrigger } from './ui/sheet'
 
 
 const NavBar = () => {
@@ -39,7 +39,11 @@ function MobileNvaBar(){
     const [isOpen,setIsOpen]=useState(false);
     return <div className="block border-separate bg-background md:hidden">
         <nav className='container flex itmes-cneter justify-between px-8'>
-            <Sheet open={isOpen} onOpenChange={setIsOpen}></Sheet>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                    <Button variant={"ghost"}></Button>
+                </SheetTrigger>
+            </Sheet>
 
         </nav>
     </div>
