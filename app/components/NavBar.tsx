@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils'
 import { buttonVariants } from './ui/button'
 import { UserButton } from '@clerk/nextjs'
 
+import { ThemeSwitcherBtn } from './ThemeSwitcherBtn'
+
 
 const NavBar = () => {
   return (
@@ -37,7 +39,7 @@ function DesktopNavbar(){
     return(
         <div className='hidden border-collapse border-b bg-background md:block'>
             <div className="flex items-center gap-2">
-                <ThemeSwitcherButton />
+                <ThemeSwitcherBtn/>
                 <UserButton  afterSignOutUrl='/sign-in'/>
             </div>
             <nav className='container flex items-center justify-between px-8'>
