@@ -1,104 +1,126 @@
-"use client"
+"use client";
 
+import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/nextjs";
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
+import { Button, buttonVariants } from "./ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import Logo, { LogoMobile } from "./Logo";
+import { ThemeSwitcherBtn } from "./ThemeSwitcherBtn";
 
-import React, { useState } from 'react'
-import Logo from './Logo'
-import { InstancedMesh } from 'three/src/Three.js'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
-import { Button, buttonVariants } from './ui/button'
-import { UserButton } from '@clerk/nextjs'
-
-import { ThemeSwitcherBtn } from './ThemeSwitcherBtn'
-import { Sheet, SheetTrigger } from './ui/sheet'
-
-
-const NavBar = () => {
+function Navbar() {
   return (
     <>
-    <DesktopNavbar />
-    <MobileNvaBar />
+      <DesktopNavbar />
+      <MobileNavbar />
     </>
-  )
+  );
 }
 
-const item=[
-    {
-        label:"Dashboard",link:"/"
-    },
-    {
-        label:"Transactions",link:"/transactions"
-    },
-    {
-        label:"Manage", link:"/manage"
-    },
-]
+const items = [
+  { label: "Dashboard", link: "/" },
+  { label: "Transactions", link: "/transactions" },
+  { label: "Manage", link: "/manage" },
+];
 
-function MobileNvaBar(){
-    const [isOpen,setIsOpen]=useState(false);
-    return <div className="block border-separate bg-background md:hidden">
-        <nav className='container flex itmes-cneter justify-between px-8'>
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetTrigger asChild>
-                    <Button variant={"ghost"}></Button>
-                </SheetTrigger>
-            </Sheet>
+function MobileNavbar() {
+  const [isOpen, setIsOpen] = useState(false);
 
-        </nav>
-    </div>
-
-}
-
-function DesktopNavbar(){
-    return(
-        <div className='hidden border-collapse border-b bg-background md:block'>
-            <div className="flex items-center gap-2">
-                <ThemeSwitcherBtn/>
-                <UserButton  afterSignOutUrl='/sign-in'/>
+  return (
+    <div className="block border-separate bg-background md:hidden">
+      <nav className="container flex items-center justify-between px-8">
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button variant={"ghost"} size={"icon"}>
+              <Menu />
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="w-[400px] sm:w-[540px]" side="left">
+            <Logo />
+            <div className="flex flex-col gap-1 pt-4">
+              {items.map((item) => (
+                <NavbarItem
+                  key={item.label}
+                  link={item.link}
+                  label={item.label}
+                  clickCallback={() => setIsOpen((prev) => !prev)}
+                />
+              ))}
             </div>
-            <nav className='container flex items-center justify-between px-8'>
-                <div className="flex h-[80px] min-h-[60px]"></div>
-                <Logo />
-                <div className="flex h-full">{item.map(item=>(
-                    <NavbarItem
-                    key={item.label}
-                    link={item.link}
-                    label={item.label}
-                    
-                    
-                    
-                    />
-                ))}</div>
-
-            </nav>
-
+          </SheetContent>
+        </Sheet>
+        <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
+          <LogoMobile />
         </div>
-    )
-}
-function NavbarItem({link,label}:
-    {
-    link:string;
-    label:string
-})
-{
-const pathname=usePathname();
-const isActive=pathname===link
-return <div className='relative flex items-center'>
-    <Link href={link} className={cn(
-        buttonVariants({variant:'ghost'}),
-        'w-full justify-start text-lg text-mute-foreground hover:text-foreground',
-        isActive &&'text-foreground'
-    )}>{label}</Link>
-    {
-        isActive&&(
-            <div className="absolute -bottom-[2px]  left-1/2 hidden h-[2px] w-[80%] -translate-x-1/2 rounded-xl bg-foreground md:block"></div>
-        )
-    }
-
-
-</div>
-
+        <div className="flex items-center gap-2">
+          <ThemeSwitcherBtn />
+          <UserButton afterSignOutUrl="/sign-in" />
+        </div>
+      </nav>
+    </div>
+  );
 }
 
-export default NavBar
+function DesktopNavbar() {
+  return (
+    <div className="hidden border-separate border-b bg-background md:block">
+      <nav className="container flex items-center justify-between px-8">
+        <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
+          <Logo />
+          <div className="flex h-full">
+            {items.map((item) => (
+              <NavbarItem
+                key={item.label}
+                link={item.link}
+                label={item.label}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <ThemeSwitcherBtn />
+          <UserButton afterSignOutUrl="/sign-in" />
+        </div>
+      </nav>
+    </div>
+  );
+}
+
+function NavbarItem({
+  link,
+  label,
+  clickCallback,
+}: {
+  link: string;
+  label: string;
+  clickCallback?: () => void;
+}) {
+  const pathname = usePathname();
+  const isActive = pathname === link;
+
+  return (
+    <div className="relative flex items-center">
+      <Link
+        href={link}
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "w-full justify-start text-lg text-muted-foreground hover:text-foreground",
+          isActive && "text-foreground"
+        )}
+        onClick={() => {
+          if (clickCallback) clickCallback();
+        }}
+      >
+        {label}
+      </Link>
+      {isActive && (
+        <div className="absolute -bottom-[2px] left-1/2 hidden h-[2px] w-[80%] -translate-x-1/2 rounded-xl bg-foreground md:block" />
+      )}
+    </div>
+  );
+}
+
+export default Navbar;
