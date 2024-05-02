@@ -1,5 +1,11 @@
+"use client"
+
+
 import React from 'react'
 import Logo from './Logo'
+import { InstancedMesh } from 'three/src/Three.js'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 
 const NavBar = () => {
@@ -10,7 +16,7 @@ const NavBar = () => {
   )
 }
 
-const itme=[
+const item=[
     {
         label:"Dashboard",link:"/"
     },
@@ -30,12 +36,36 @@ function DesktopNavbar(){
             <nav className='container flex items-center justify-between px-8'>
                 <div className="flex h-[80px] min-h-[60px]"></div>
                 <Logo />
-                <div className="flex h-full"></div>
+                <div className="flex h-full">{item.map(item=>(
+                    <NavbarItem
+                    key={item.label}
+                    link={item.link}
+                    label={item.label}
+                    
+                    
+                    
+                    />
+                ))}</div>
 
             </nav>
 
         </div>
     )
+}
+function NavbarItem({link,label}:
+    {
+    link:string;
+    label:string
+})
+{
+const pathname=usePathname();
+const isActive=pathname===link
+return <div className='relative flex items-center'>
+    <Link href={link}>{label}</Link>
+
+
+</div>
+
 }
 
 export default NavBar
