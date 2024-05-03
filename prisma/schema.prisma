@@ -9,6 +9,46 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
+
+model UserSetting{
+  userId String @id
+  currency String
+}
+model Category{
+  createdAt DateTime @default(now())
+  name String
+  userId String
+  icon String
+  type String @default("income")
+  
+  @@unique([name,userId,type])
+
+
+
+
+
+}
+
+model Trasactions{
+  id String
+  createdAt DateTime @default(now())
+  updateAt DateTime @default(now())
+  amount Int
+  description String
+  data DateTime @default(now())
+
+
+
+
+
+}
+
+
+
+
+
+
+
