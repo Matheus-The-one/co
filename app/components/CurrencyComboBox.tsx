@@ -6,7 +6,8 @@ import { Button } from "./ui/button"
 import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command"
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { Currencies } from "@/lib/currencies"
+import { Currencies,  Currency } from "@/lib/currencies"
+import { useQuery } from "@tanstack/react-query"
 
 
 
@@ -17,9 +18,15 @@ import { Currencies } from "@/lib/currencies"
 export function CurrencyComboBox() {
   const [open, setOpen] = React.useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [selectedOption, setSelectedoption] = React.useState<Currencies | null>(
+  const [selectedOption, setSelectedoption] = React.useState<Currency | null>(
     null
   )
+
+  const userSettings = useQuery({
+    queryKey: ["userSettings"],
+    queryFn: () => fetch("/api/user-settings").then((res) => res.json()),
+  });
+  console.log("usersetting",userSettings)
 
   if (isDesktop) {
     return (
@@ -57,7 +64,7 @@ function OptionList({
   setSelectedOption,
 }: {
   setOpen: (open: boolean) => void
-  setSelectedOption: (status: Currencies | null) => void
+  setSelectedOption: (status: Currency | null) => void
 }) {
   return (
     <Command>
@@ -65,7 +72,7 @@ function OptionList({
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {Currencies.map((currency: Currencies) => (
+          {Currencies.map((currency: Currency) => (
             <CommandItem
               key={currency.value}
               value={currency.value}

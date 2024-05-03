@@ -27,4 +27,4 @@ export const  Currencies=[
 ]
 
 
-export type Currencies=(typeof Currencies)[0]
+export type Currency=(typeof Currencies)[0]
