@@ -9,11 +9,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = "file:./dev.db"
 }
 
- model UserSettings {
+model UserSettings {
   userId   String @id
   currency String
 }
