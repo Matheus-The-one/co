@@ -25,3 +25,6 @@ export const  Currencies=[
         locale:"ge-GE"
     }
 ]
+
+
+export type Currencies=(typeof Currencies)[0]
